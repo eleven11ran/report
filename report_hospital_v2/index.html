@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全国医院建设领域月度报告 · 医院版（含公式标注）</title>
+<style>
+:root {
+  --primary: #1a56db;
+  --primary-light: #e8edfb;
+  --accent: #e74c3c;
+  --green: #27ae60;
+  --orange: #f39c12;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --gray-900: #111827;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --radius: 8px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--gray-100); color: var(--gray-900); line-height: 1.6; }
+
+.nav { background: var(--primary); color: #fff; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-md); }
+.nav-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; }
+.nav-title { font-size: 16px; font-weight: 600; }
+.nav-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 12px; }
+
+.main-layout { max-width: 1400px; margin: 0 auto; display: flex; gap: 0; }
+.report-area { flex: 1; padding: 24px; min-width: 0; }
+.fields-panel { width: 280px; flex-shrink: 0; background: #fff; border-left: 1px solid var(--gray-200); padding: 20px; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; }
+
+.container { max-width: 1080px; margin: 0 auto; }
+
+.cover { background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%); color: #fff; border-radius: var(--radius); padding: 48px 40px; margin-bottom: 24px; position: relative; overflow: hidden; }
+.cover::after { content: ''; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+.cover-tag { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 16px; border-radius: 20px; font-size: 13px; margin-bottom: 16px; }
+.cover h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.cover .sub { font-size: 16px; opacity: 0.85; }
+.cover .meta { margin-top: 20px; font-size: 13px; opacity: 0.7; display: flex; gap: 24px; }
+
+.section { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+.section-header { padding: 20px 24px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+.section-header h2 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.section-header h2 .icon { width: 24px; height: 24px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.section-body { padding: 24px; }
+.section-note { padding: 12px 24px; background: var(--primary-light); color: var(--primary); font-size: 13px; border-top: 1px solid var(--gray-200); }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: #fff; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); text-align: center; position: relative; }
+.kpi-card .label { font-size: 13px; color: var(--gray-500); margin-bottom: 8px; }
+.kpi-card .value { font-size: 28px; font-weight: 700; color: var(--gray-900); }
+.kpi-card .change { font-size: 13px; margin-top: 4px; }
+.kpi-card .change.up { color: var(--green); }
+.kpi-card .change.down { color: var(--accent); }
+
+/* Formula tooltip */
+.formula-tag { display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; border: 1px solid #fbbf24; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; cursor: help; position: relative; white-space: nowrap; }
+.formula-tag:hover .formula-pop { display: block; }
+.formula-pop { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1e293b; color: #f1f5f9; padding: 10px 14px; border-radius: 6px; font-size: 12px; z-index: 200; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.3); line-height: 1.6; }
+.formula-pop::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #1e293b; }
+
+/* Inline formula */
+.formula-inline { background: #fffbeb; border: 1px solid #fde68a; color: #78350f; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-family: 'SF Mono', 'Consolas', monospace; }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th { background: var(--gray-50); padding: 12px 16px; text-align: left; font-weight: 600; color: var(--gray-700); border-bottom: 2px solid var(--gray-200); white-space: nowrap; }
+.data-table td { padding: 12px 16px; border-bottom: 1px solid var(--gray-200); }
+.data-table tr:hover { background: var(--gray-50); }
+.data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+.tag-blue { background: #dbeafe; color: #1d4ed8; }
+.tag-green { background: #dcfce7; color: #15803d; }
+.tag-orange { background: #fef3c7; color: #b45309; }
+.tag-red { background: #fee2e2; color: #dc2626; }
+.tag-purple { background: #f3e8ff; color: #7c3aed; }
+.tag-gray { background: var(--gray-200); color: var(--gray-700); }
+
+.map-placeholder { background: var(--gray-50); border: 2px dashed var(--gray-300); border-radius: var(--radius); height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--gray-500); font-size: 14px; }
+.map-placeholder .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
+
+.province-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.province-card { border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 20px; }
+.province-card .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.province-card .header h3 { font-size: 16px; font-weight: 600; }
+.province-card .stats { display: flex; gap: 16px; margin-bottom: 12px; }
+.province-card .stat { text-align: center; }
+.province-card .stat .num { font-size: 20px; font-weight: 700; color: var(--primary); }
+.province-card .stat .unit { font-size: 12px; color: var(--gray-500); }
+.province-card .type-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+.province-card .projects { font-size: 13px; color: var(--gray-700); }
+.province-card .projects li { margin-bottom: 4px; list-style: none; padding-left: 12px; position: relative; }
+.province-card .projects li::before { content: '·'; position: absolute; left: 0; font-weight: 700; color: var(--primary); }
+
+.peer-section { margin-bottom: 20px; }
+.peer-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: var(--gray-50); border-radius: var(--radius); margin-bottom: 12px; }
+.peer-header .badge { padding: 4px 12px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+.peer-header h3 { font-size: 16px; font-weight: 600; }
+
+.chart-placeholder { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--gray-500); font-size: 13px; }
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+.summary-box { background: linear-gradient(135deg, #eff6ff, #dbeafe); border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin-bottom: 20px; }
+.summary-box p { font-size: 15px; color: var(--gray-700); line-height: 1.7; }
+
+.obs-list { list-style: none; }
+.obs-list li { padding: 12px 0; border-bottom: 1px solid var(--gray-200); display: flex; gap: 12px; align-items: flex-start; }
+.obs-list li:last-child { border-bottom: none; }
+.obs-num { min-width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.obs-text { font-size: 14px; color: var(--gray-700); line-height: 1.6; }
+
+.pred-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.pred-card { border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 20px; text-align: center; }
+.pred-card .label { font-size: 13px; color: var(--gray-500); margin-bottom: 8px; }
+.pred-card .value { font-size: 22px; font-weight: 700; color: var(--primary); }
+.pred-card .confidence { font-size: 12px; color: var(--green); margin-top: 4px; }
+
+.footer { text-align: center; padding: 40px 24px; color: var(--gray-500); font-size: 13px; }
+.footer .divider { width: 60px; height: 3px; background: var(--gray-300); margin: 0 auto 16px; border-radius: 2px; }
+
+/* Fields Panel */
+.fields-panel h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: var(--gray-900); display: flex; align-items: center; gap: 8px; }
+.field-section { margin-bottom: 20px; }
+.field-section-title { font-size: 12px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--gray-200); }
+.field-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 6px; margin-bottom: 4px; font-size: 13px; transition: background 0.15s; cursor: default; }
+.field-item:hover { background: var(--gray-50); }
+.field-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.field-dot.core { background: var(--accent); }
+.field-dot.derived { background: var(--primary); }
+.field-dot.computed { background: var(--orange); }
+.field-name { font-weight: 500; color: var(--gray-900); flex: 1; }
+.field-source { font-size: 10px; color: var(--gray-500); background: var(--gray-100); padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
+.field-legend { display: flex; gap: 12px; margin-bottom: 16px; font-size: 11px; color: var(--gray-500); }
+.field-legend span { display: flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="nav-title">📊 医院建设月度报告 · 医院版</div>
+      <div class="nav-badge">含公式标注</div>
+    </div>
+  </div>
+</div>
+
+<div class="main-layout">
+<div class="report-area">
+<div class="container">
+
+<!-- Cover -->
+<div class="cover">
+  <div class="cover-tag">2026年6月 · 总第1期</div>
+  <h1>全国医院建设领域月度报告</h1>
+  <div class="sub">面向医院决策者的行业洞察与同行对标</div>
+  <div class="meta">
+    <span>📅 数据周期：2026.06.01 - 06.30</span>
+    <span>📍 覆盖：31省/直辖市</span>
+    <span>🏢 XX数据研究中心</span>
+  </div>
+</div>
+
+<!-- Section 1: Overview -->
+<div class="section">
+  <div class="section-header">
+    <h2><span class="icon" style="background:#dbeafe;color:#1d4ed8;">📈</span> 一、本月概览</h2>
+  </div>
+  <div class="section-body">
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="label">招投标项目总数</div>
+        <div class="value">2,847</div>
+        <div class="change up">
+          ↑ 12.3%
+          <span class="formula-tag">📐公式
+            <span class="formula-pop">环比 = (本月项目数 - 上月项目数) / 上月项目数 × 100%<br>= (2847 - 2535) / 2535 × 100% = 12.3%</span>
+          </span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">全国投资总额</div>
+        <div class="value">386<span style="font-size:14px;font-weight:400;">亿</span></div>
+        <div class="change up">
+          ↑ 8.7%
+          <span class="formula-tag">📐公式
+            <span class="formula-pop">环比 = (本月投资总额 - 上月投资总额) / 上月投资总额 × 100%<br>= (386 - 355.1) / 355.1 × 100% = 8.7%</span>
+          </span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">涉及医院数量</div>
+        <div class="value">1,523</div>
+        <div class="change up">
+          ↑ 5.2%
+          <span class="formula-tag">📐公式
+            <span class="formula-pop">环比 = (本月医院数 - 上月医院数) / 上月医院数 × 100%<br>= (1523 - 1448) / 1448 × 100% = 5.2%<br>⚠ 同一医院多个项目只计1次</span>
+          </span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">覆盖省份数</div>
+        <div class="value">31</div>
+        <div class="change">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">项目平均投资额</div>
+        <div class="value">1,356<span style="font-size:14px;font-weight:400;">万</span></div>
+        <div class="change down">
+          ↓ 3.1%
+          <span class="formula-tag">📐公式
+            <span class="formula-pop">平均投资额 = 本月投资总额 / 本月项目数<br>= 386亿 / 2847 = 1356万<br>环比 = (1356 - 1399) / 1399 × 100% = -3.1%</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="summary-box">
+      <p><strong>一句话总结：</strong>本月全国医院建设市场呈现稳步增长态势，投资总额386亿元环比上升8.7%，广东省投资最为活跃，项目类型以改扩建为主占比38%，新建项目投资额占比最高达45%。</p>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: Heat Map -->
+<div class="section">
+  <div class="section-header">
+    <h2><span class="icon" style="background:#fee2e2;color:#dc2626;">🗺️</span> 二、全国建设投资热度地图</h2>
+  </div>
+  <div class="section-body">
+    <div class="map-placeholder">
+      <div class="icon">🗺️</div>
+      <div>中国地图热力图</div>
+      <div style="font-size:12px;margin-top:4px;">按省份投资金额着色，标注TOP5省份核心项目</div>
+    </div>
+    <div style="margin-top:20px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>排名</th><th>省份</th><th>项目数</th>
+            <th class="num">投资总额(亿)</th>
+            <th>环比 <span class="formula-inline">环比=(本月-上月)/上月×100%</span></th>
+            <th>最活跃城市</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>广东</strong></td><td>342</td><td class="num">52.3</td><td><span class="tag tag-green">↑15.2%</span></td><td>广州/深圳</td></tr>
+          <tr><td>2</td><td><strong>四川</strong></td><td>287</td><td class="num">41.8</td><td><span class="tag tag-green">↑12.6%</span></td><td>成都</td></tr>
+          <tr><td>3</td><td><strong>山东</strong></td><td>256</td><td class="num">35.6</td><td><span class="tag tag-green">↑8.3%</span></td><td>济南/青岛</td></tr>
+          <tr><td>4</td><td><strong>江苏</strong></td><td>231</td><td class="num">33.2</td><td><span class="tag tag-orange">→0.5%</span></td><td>南京/苏州</td></tr>
+          <tr><td>5</td><td><strong>浙江</strong></td><td>198</td><td class="num">28.9</td><td><span class="tag tag-green">↑6.1%</span></td><td>杭州</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="section-note">💡 环比公式：(本月投资额 - 上月投资额) / 上月投资额 × 100%，正值↑表示上升，负值↓表示下降</div>
+</div>
+
+<!-- Section 3: Province Details -->
+<div class="section">
+  <div class="section-header">
+    <h2><span class="icon" style="background:#dcfce7;color:#15803d;">🏢</span> 三、各省份建设动态TOP10</h2>
+  </div>
+  <div class="section-body">
+    <div class="province-grid">
+      <div class="province-card">
+        <div class="header">
+          <h3>🔴 广东省</h3>
+          <span class="tag tag-green">↑15.2%</span>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="num">342</div><div class="unit">项目数</div></div>
+          <div class="stat"><div class="num">52.3亿</div><div class="unit">投资额</div></div>
+        </div>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--gray-500);">
+          项目类型占比 <span class="formula-inline">占比=该类项目数/本省总项目数×100%</span>
+        </div>
+        <div class="type-bar">
+          <span style="width:35%;background:#3b82f6;" title="新建 35%"></span>
+          <span style="width:30%;background:#10b981;" title="改扩建 30%"></span>
+          <span style="width:15%;background:#f59e0b;" title="设备采购 15%"></span>
+          <span style="width:12%;background:#8b5cf6;" title="信息化 12%"></span>
+          <span style="width:8%;background:#ef4444;" title="装修改造 8%"></span>
+        </div>
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:12px;">
+          新建35% · 改扩建30% · 设备15% · 信息化12% · 装修8%
+        </div>
+        <ul class="projects">
+          <li>南方医科大学深圳医院新院区建设项目（18.5亿）</li>
+          <li>广州市番禺区中心医院改扩建项目（6.2亿）</li>
+          <li>深圳大学总医院二期工程（4.8亿）</li>
+        </ul>
+      </div>
+      <div class="province-card">
+        <div class="header">
+          <h3>🔴 四川省</h3>
+          <span class="tag tag-green">↑12.6%</span>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="num">287</div><div class="unit">项目数</div></div>
+          <div class="stat"><div class="num">41.8亿</div><div class="unit">投资额</div></div>
+        </div>
+        <div style="margin-bottom:8px;font-size:12px;color:var(--gray-500);">
+          项目类型占比 <span class="formula-inline">占比=该类项目数/本省总项目数×100%</span>
+        </div>
+        <div class="type-bar">
+          <span style="width:28%;background:#3b82f6;"></span>
+          <span style="width:35%;background:#10b981;"></span>
+          <span style="width:18%;background:#f59e0b;"></span>
+          <span style="width:10%;background:#8b5cf6;"></span>
+          <span style="width:9%;background:#ef4444;"></span>
+        </div>
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:12px;">
+          新建28% · 改扩建35% · 设备18% · 信息化10% · 装修9%
+        </div>
+        <ul class="projects">
+          <li>四川省人民医院天府院区二期（12.3亿）</li>
+          <li>华西医院锦江院区建设（8.7亿）</li>
+          <li>成都市第三人民医院改扩建（3.5亿）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Project Type -->
+<div class="section">
+  <div class="section-header">
+    <h2><span class="icon" style="background:#fef3c7;color:#b45309;">📊</span> 四、项目类型结构分析</h2>
+  </div>
+  <div class="section-body">
+    <div class="chart-row">
+      <div class="chart-placeholder">🥧 饼图：按投资额占比</div>
+      <div class="chart-placeholder">🥧 饼图：按项目数占比</div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>项目类别</th>
+          <th>项目数</th>
+          <th>占比 <span class="formula-inline">=该类项目数/总项目数×100%</span></th>
+          <th class="num">投资额(亿)</th>
+          <th>占比 <span class="formula-inline">=该类投资额/总投资额×100%</span></th>
+          <th>环比 <span class="formula-inline">=(本月-上月)/上月×100%</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tag tag-blue">新建</span></td><td>623</td><td>21.9%</td><td class="num">173.7</td><td>45.0%</td><td><span class="tag tag-green">↑5.2%</span></td></tr>
+        <tr><td><span class="tag tag-green">改扩建</span></td><td>1,082</td><td>38.0%</td><td class="num">108.2</td><td>28.0%</td><td><span class="tag tag-green">↑3.8%</span></td></tr>
+        <tr><td><span class="tag tag-orange">设备采购</span></td><td>456</td><td>16.0%</td><td class="num">42.5</td><td>11.0%</td><td><span class="tag tag-orange">→1.2%</span></td></tr>
+        <tr><td><span class="tag tag-purple">信息化建设</span></td><td>312</td><td>11.0%</td><td class="num">34.7</td><td>9.0%</td><td><span class="tag tag-green">↑18.6%</span></td></tr>
+        <tr><td><span class="tag tag-red">装修改造</span></td><td>228</td><td>8.0%</td><td class="num">19.3</td><td>5.0%</td><td><span class="tag tag-green">↑2.1%</span></td></tr>
+        <tr><td><span class="tag tag-gray">其他</span></td><td>146</td><td>5.1%</td><td class="num">7.6</td><td>2.0%</td><td><span class="tag tag-red">↓4.3%</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="section-note">📐 占比公式：某类别项目数占比 = 该类别项目数 / 全国项目总数 × 100%；某类别投资额占比 = 该类别投资额 / 全国投资总额 × 100%</div>
+</div>
+
+<!-- Section 5: Peer Comparison -->
+<div class="section">
+  <div class="section-header">
+    <h2><span class="icon" style="background:#f3e8ff;color:#7c3aed;">🏥</span> 五、同等级医院建设对标</h2>
+    <span style="font-size:13px;color:var(--primary);font-weight:500;">⭐ 医院版核心章节</span>
+  </div>
+  <div class="section-body">
+
+    <div class="peer-section">
+      <div class="peer-header">
+        <span class="badge" style="background:#dbeafe;color:#1d4ed8;">三甲医院</span>
+        <h3>三甲医院建设动态</h3>
+        <span style="font-size:13px;color:var(--gray-500);margin-left:auto;">本月 186 个项目 · 投资总额 248.3亿</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>医院名称</th><th>省市</th><th>项目类型</th><th class="num">投资额</th><th>项目阶段</th><th>中标企业</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>南方医科大学深圳医院</td><td>广东·深圳</td><td><span class="tag tag-blue">新建</span></td><td class="num">18.5亿</td><td><span class="tag tag-orange">招标公告</span></td><td>—</td></tr>
+          <tr><td>四川省人民医院</td><td>四川·成都</td><td><span class="tag tag-green">改扩建</span></td><td class="num">12.3亿</td><td><span class="tag tag-green">中标公示</span></td><td>中建X局</td></tr>
+          <tr><td>山东省立医院</td><td>山东·济南</td><td><span class="tag tag-green">改扩建</span></td><td class="num">9.2亿</td><td><span class="tag tag-orange">招标公告</span></td><td>—</td></tr>
+          <tr><td>南京鼓楼医院</td><td>江苏·南京</td><td><span class="tag tag-blue">新建</span></td><td class="num">7.8亿</td><td><span class="tag tag-green">中标公示</span></td><td>XX建设集团</td></tr>
+          <tr><td>华西医院</td><td>四川·成都</td><td><span class="tag tag-blue">新建</span></td><td class="num">8.7亿</td><td><span class="tag tag-orange">招标公告</span></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="peer-section">
+      <div class="peer-header">
+        <span class="badge" style="background:#dcfce7;color:#15803d;">二甲医院</span>
+        <h3>二甲医院建设动态</h3>
+        <span style="font-size:13px;color:var(--gray-500);margin-left:auto;">本月 423 个项目 · 投资总额 98.6亿</span>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>医院名称</th><th>省市</th><th>项目类型</th><th class="num">投资额</th><th>项目阶段</th><th>中标企业</th></tr></thead>
+        <tbody>
+          <tr><td>XX市第二人民医院</td><td>湖南·长沙</td><td><span class="tag tag-green">改扩建</span></td><td class="num">3.2亿</td><td><span class="tag tag-green">中标公示</span></td><td>XX建筑</td></tr>
+          <tr><td>XX区中心医院</td><td>浙江·杭州</td><td><span class="tag tag-blue">新建</span></td><td class="num">2.8亿</td><td><span class="tag tag-orange">招标公告</span></td><td>—</td></tr>
+          <tr><td>XX县人民医院</td><td>安徽·合肥</td><td><span class="tag tag-orange">设备采购</span></td><td class="num">1.5亿</td><td><span class="tag tag-green">中标公示</span></td><td>XX医疗</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="peer-section">
+      <div class="peer-header">
+        <span class="badge" style="background:#fef3c7;color:#b45309;">基层医疗</span>
+        <h3>基层医疗机构建设动态</h3>
+        <span style="font-size:13px;color:var(--gray-500);margin-left:auto;">本月 914 个项目 · 投资总额 38.7亿</span>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>机构名称</th><th>省市</th><th>项目类型</th><th class="num">投资额</th><th>项目阶段</th></tr></thead>
+        <tbody>
+          <tr><td>XX社区卫生服务中心</td><td>北京·朝阳</td><td><span class="tag tag-green">改扩建</span></td><td class="num">3,200万</td><td><span class="tag tag-green">中标公示</span></td></tr>
+          <tr><td>XX镇卫生院</td><td>河南·郑州</td><td><span class="tag tag-orange">设备采购</span></td><td class="num">850万</td><td><span class="tag tag-orange">招标公告</span></td></tr>
+          <tr><td>XX社区卫生服务中心</td><td>广东·佛山</td><td><span class="tag tag-red">装修改造</span></td><td class="num">560万</td><td><span class="tag tag-green">中标公示</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="summary-box" style="margin-top:20px;">
+      <p><strong>对标分析：</strong></p>
+      <p style="margin-top:8px;">
+        ① 三甲医院平均投资 <span class="formula-inline">=三甲投资额/三甲项目数=248.3亿/186=1.33亿</span>，以新建和改扩建为主，中标企业以大型国企为主<br>
+        ② 二甲医院平均投资 <span class="formula-inline">=二甲投资额/二甲项目数=98.6亿/423=2,331万</span>，改扩建和设备采购并重<br>
+        ③ 基层平均投资 <span class="formula-inline">=基层投资额/基层项目数=38.7亿/914=423万</span>，区县级项目占基层项目68%
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Section 6: Key Projects -->
+<div class="section">
+  <div class="section-header">
+    <h2><span class="icon" style="background:#fce7f3;color:#db2777;">⭐</span> 六、重点项目速览</h2>
+  </div>
+  <div class="section-body">
+    <table class="data-table">
+      <thead><tr><th>排名</th><th>医院名称</th><th>省市</th><th>项目名称</th><th class="num">投资额</th><th>项目类别</th><th>项目阶段</th><th>发布日期</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>南方医科大学深圳医院</td><td>广东·深圳</td><td>新院区建设项目</td><td class="num">18.5亿</td><td><span class="tag tag-blue">新建</span></td><td><span class="tag tag-orange">招标公告</span></td><td>6/15</td></tr>
+        <tr><td>2</td><td>四川省人民医院</td><td>四川·成都</td><td>天府院区二期</td><td class="num">12.3亿</td><td><span class="tag tag-green">改扩建</span></td><td><span class="tag tag-green">中标公示</span></td><td>6/08</td></tr>
+        <tr><td>3</td><td>山东省立医院</td><td>山东·济南</td><td>东院区续建项目</td><td class="num">9.2亿</td><td><span class="tag tag-green">改扩建</span></td><td><span class="tag tag-orange">招标公告</span></td><td>6/11</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="section-note">📐 排名依据：按投资金额降序排列；筛选标准：投资额≥5000万</div>
+</div>
+
+<!-- Section 7: Trends -->
+<div class="section">
+  <div class="section-header">
+    <h2><span class="icon" style="background:#ecfdf5;color:#059669;">🔮</span> 七、趋势观察与预判</h2>
+  </div>
+  <div class="section-body">
+    <div class="chart-row">
+      <div class="chart-placeholder">📈 近6个月项目数量×投资金额双轴趋势图<br><span style="font-size:11px;color:var(--gray-500);">环比=（当月-上月）/上月×100%</span></div>
+      <div class="chart-placeholder">📊 区域趋势变化<br><span style="font-size:11px;color:var(--gray-500);">连续3月趋势=近3个月环比的加权平均</span></div>
+    </div>
+
+    <h3 style="margin:20px 0 12px;font-size:15px;">本月观察</h3>
+    <ul class="obs-list">
+      <li><span class="obs-num">1</span><span class="obs-text">四川省连续3个月投资额上升（4月28.3亿→5月35.6亿→6月41.8亿），预计与"十四五"基层医疗补短板政策推进相关</span></li>
+      <li><span class="obs-num">2</span><span class="obs-text">信息化类项目占比从上月8.5%升至11.0% <span class="formula-inline">占比变化=本月占比-上月占比=11.0%-8.5%=+2.5pp</span>，反映医院数字化转型加速</span></li>
+      <li><span class="obs-num">3</span><span class="obs-text">新建项目投资额占比45%但项目数仅占22% <span class="formula-inline">投资额占比/项目数占比=45%/22%=2.05，说明新建项目单体投资远高于平均</span></span></li>
+    </ul>
+
+    <h3 style="margin:24px 0 16px;font-size:15px;">下月预判</h3>
+    <div class="pred-grid">
+      <div class="pred-card">
+        <div class="label">全国投资额区间</div>
+        <div class="value">360-410亿</div>
+        <div class="confidence">置信度：高</div>
+        <div style="font-size:10px;color:var(--gray-500);margin-top:4px;">基于近6月移动平均±1标准差</div>
+      </div>
+      <div class="pred-card">
+        <div class="label">重点关注省份</div>
+        <div class="value">广东/四川/浙江</div>
+        <div class="confidence">置信度：中</div>
+      </div>
+      <div class="pred-card">
+        <div class="label">热门方向</div>
+        <div class="value">信息化/改扩建</div>
+        <div class="confidence">置信度：中</div>
+      </div>
+    </div>
+  </div>
+  <div class="section-note">📐 预判方法：投资额区间 = 近6月移动均值 ± 1个标准差；置信度基于历史预测准确率</div>
+</div>
+
+<div class="footer">
+  <div class="divider"></div>
+  <p>本报告由XX数据研究中心出品</p>
+  <p>数据来源：全国31省招投标公开信息 · 数据周期：2026年6月</p>
+</div>
+
+</div>
+</div>
+
+<!-- Right Panel: Fields -->
+<div class="fields-panel">
+  <h3>📋 报告所需字段</h3>
+
+  <div class="field-legend">
+    <span><span class="field-dot core"></span> 原始字段</span>
+    <span><span class="field-dot derived"></span> 衍生字段</span>
+    <span><span class="field-dot computed"></span> 计算指标</span>
+  </div>
+
+  <div class="field-section">
+    <div class="field-section-title">原始数据字段</div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">医院名称</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">项目名称</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">信息发布时间</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">省市</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">投资金额</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">项目类别</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">项目阶段</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">中标企业</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">中标金额</span><span class="field-source">必填</span></div>
+    <div class="field-item"><span class="field-dot core"></span><span class="field-name">医院等级</span><span class="field-source">必填</span></div>
+  </div>
+
+  <div class="field-section">
+    <div class="field-section-title">衍生字段（从原始字段提取）</div>
+    <div class="field-item"><span class="field-dot derived"></span><span class="field-name">省份</span><span class="field-source">← 省市</span></div>
+    <div class="field-item"><span class="field-dot derived"></span><span class="field-name">城市</span><span class="field-source">← 省市</span></div>
+    <div class="field-item"><span class="field-dot derived"></span><span class="field-name">区域（华东/西南…）</span><span class="field-source">← 省市</span></div>
+    <div class="field-item"><span class="field-dot derived"></span><span class="field-name">年月</span><span class="field-source">← 发布时间</span></div>
+  </div>
+
+  <div class="field-section">
+    <div class="field-section-title">计算指标 & 公式</div>
+    <div class="field-item"><span class="field-dot computed"></span><span class="field-name" style="font-size:12px;">环比增长率</span><span class="field-source">计算</span></div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:6px 8px;margin:0 0 6px 10px;font-size:11px;color:#78350f;font-family:monospace;line-height:1.5;">(本期-上期)/上期×100%</div>
+    <div class="field-item"><span class="field-dot computed"></span><span class="field-name" style="font-size:12px;">同比增长率</span><span class="field-source">计算</span></div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:6px 8px;margin:0 0 6px 10px;font-size:11px;color:#78350f;font-family:monospace;line-height:1.5;">(本期-去年同期)/去年同期×100%</div>
+    <div class="field-item"><span class="field-dot computed"></span><span class="field-name" style="font-size:12px;">占比</span><span class="field-source">计算</span></div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:6px 8px;margin:0 0 6px 10px;font-size:11px;color:#78350f;font-family:monospace;line-height:1.5;">部分/整体×100%</div>
+    <div class="field-item"><span class="field-dot computed"></span><span class="field-name" style="font-size:12px;">项目平均投资额</span><span class="field-source">计算</span></div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:6px 8px;margin:0 0 6px 10px;font-size:11px;color:#78350f;font-family:monospace;line-height:1.5;">投资总额/项目总数</div>
+    <div class="field-item"><span class="field-dot computed"></span><span class="field-name" style="font-size:12px;">集中度</span><span class="field-source">计算</span></div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:6px 8px;margin:0 0 6px 10px;font-size:11px;color:#78350f;font-family:monospace;line-height:1.5;">TOP N企业中标额/总中标额×100%</div>
+    <div class="field-item"><span class="field-dot computed"></span><span class="field-name" style="font-size:12px;">移动平均</span><span class="field-source">计算</span></div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:6px 8px;margin:0 0 6px 10px;font-size:11px;color:#78350f;font-family:monospace;line-height:1.5;">近N月均值(MA3/MA6)</div>
+  </div>
+
+  <div class="field-section">
+    <div class="field-section-title">各章节所需字段</div>
+    <div style="font-size:12px;line-height:2;">
+      <div><strong>一、概览</strong>：全部10字段</div>
+      <div><strong>二、热度地图</strong>：省市、投资金额、项目类别</div>
+      <div><strong>三、省份动态</strong>：省市、项目类别、投资金额、项目名称</div>
+      <div><strong>四、类型分析</strong>：项目类别、投资金额</div>
+      <div><strong>五、同行对标</strong>：医院等级、中标企业、中标金额</div>
+      <div><strong>六、重点项目</strong>：投资金额、项目阶段</div>
+      <div><strong>七、趋势</strong>：信息发布时间</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

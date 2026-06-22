@@ -1,0 +1,7 @@
+# Ignore everything except the two report folders
+*
+!report_hospital_v2/
+!report_enterprise_v2/
+!report_hospital_v2/**
+!report_enterprise_v2/**
+!.gitignore
